@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us - Shop Novelle</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #071225;
+      color: #ffffff;
+    }
+
+    /* Navigation */
+    .navbar {
+      width: 93.4%;
+      padding: 20px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-box {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  background: linear-gradient(135deg, #0b5c7c, #af19dc);
+  color: rgb(249, 252, 255);
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Contact Section */
+    .contact-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .contact-header h1 {
+      font-size: 42px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    /* Info Card */
+    .info-card {
+      padding: 30px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+    }
+
+    .info-card h2 {
+      color: #6c63ff;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .info-card p {
+      line-height: 1.7;
+      opacity: 0.9;
+      font-size: 16px;
+    }
+
+    /* Contact Form */
+    .form-card {
+      padding: 30px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+    }
+
+    .form-card label {
+      font-size: 16px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-card input,
+    .form-card textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    .form-card textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    .form-card button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: #6c63ff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form-card button:hover {
+      background: #5a54e0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 80px;
+      padding: 20px;
+      font-size: 14px;
+      opacity: 0.6;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <div class="navbar">
+    <div class="logo">
+      <div class="logo-box">SN</div>
+      <strong>Shop Novelle</strong>
+    </div>
+
+    <div class="nav-links">
+      <a href="file:///C:/Users/ADMIN/Downloads/Group_2%20Intro_Com%20Final%20Project%20BSIT%201E/final%20project%20website%20Group%202.html">Home</a>
+      <a href="file:///C:/Users/ADMIN/Downloads/Group_2%20Intro_Com%20Final%20Project%20BSIT%201E/ABOUT%20US%20.html">About Us</a>
+      <a href="contact.html" style="background: rgba(255,255,255,0.1);">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="contact-container">
+    <div class="contact-header">
+      <h1>Contact Us</h1>
+      <p>We’d love to hear from you! Reach out to us anytime.</p>
+    </div>
+
+    <div class="contact-grid">
+      
+      <!-- Contact Info -->
+      <div class="info-card">
+        <h2>Get in Touch</h2>
+        <p><strong>Email:</strong> support@shopnovelle.com</p>
+        <p><strong>Phone:</strong> 0995-123-4567</p>
+        <p><strong>Location:</strong> Bicol, Philippines</p>
+        <p><strong>Business Hours:</strong><br>
+            Monday - Sunday, 9:00 AM - 7:00 PM
+        </p>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="form-card">
+        <h2>Send us a Message</h2>
+
+        <form>
+          <label>Your Name</label>
+          <input type="text" placeholder="Enter your name" required>
+
+          <label>Your Email</label>
+          <input type="email" placeholder="Enter your email" required>
+
+          <label>Your Message</label>
+          <textarea placeholder="Type your message..." required></textarea>
+
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 Shop Novelle — All Rights Reserved
+  </div>
+
+</body>
+</html>

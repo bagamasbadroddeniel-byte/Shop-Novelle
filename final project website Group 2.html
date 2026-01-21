@@ -1,0 +1,473 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop Novelle</title>
+  <meta name="description" content="Simple single-file e-commerce demo: product grid, cart, search, filters, responsive." />    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">  <style>
+    :root{
+      --bg:#0f1724; 
+      --card:#213865;
+      --muted:#bdbeeb;
+      --accent:#1a6a78; 
+      --glass: rgba(255,255,255,0.04);
+      --radius:12px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,#071028 0%,#0b1220 100%); color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+    }
+
+    
+    .container{max-width:1200px;margin:0 auto;}
+    header{display:flex;align-items:center;gap:18px;justify-content:space-between;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#9c29d9);display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{font-size:18px;margin:0}
+    .sub{color:var(--muted);font-size:13px}
+
+    
+    .controls{display:flex;gap:12px;align-items:center}
+    .search{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:10px 12px;border-radius:10px;display:flex;align-items:center;gap:8px;min-width:260px}
+    .search input{border:0;background:transparent;color:inherit;outline:none;width:180px}
+    .filters{display:flex;gap:8px;}
+    .btn{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);padding:10px 12px;border-radius:10px;cursor:pointer}
+
+    
+    .main{display:grid;grid-template-columns:1fr 360px;gap:20px}
+    @media (max-width:900px){ .main{grid-template-columns:1fr} .cart-panel{order:2} }
+
+    
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:var(--radius); padding:12px; border:1px solid rgba(255,255,255,0.03); display:flex;flex-direction:column; gap:10px}
+    .thumb{width:100%;aspect-ratio:4/3;border-radius:10px;overflow:hidden;display:block}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .title{font-weight:600}
+    .price-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .price{font-weight:700}
+    .tag{background:rgba(255,255,255,0.04);padding:6px 8px;border-radius:999px;font-size:12px;color:var(--muted)}
+
+    
+    .cart-panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);height:fit-content}
+    .cart-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+    .cart-item{display:flex;gap:10px;align-items:center}
+    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+    .cart-meta{flex:1}
+    .qty{display:flex;align-items:center;gap:6px}
+    .muted{color:var(--muted);font-size:13px}
+
+    
+    footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+
+    
+    .grow{flex:1}
+    .center{display:flex;align-items:center;justify-content:center}
+
+    
+    .modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;padding:24px}
+    .modal.open{display:flex}
+    .modal-card{width:820px;max-width:100%;background:linear-gradient(180deg,#071025,#071427);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .modal-card img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+
+    
+    @media (max-width:600px){ .search input{width:90px} .logo{display:none} }
+
+    
+    button:focus,input:focus{outline:2px solid rgba(6,182,212,0.12);outline-offset:2px}
+  </style></head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">SN</div>
+        <div>
+          <h1>Shop Novelle</h1>
+          <div class="sub">MODERN, STYLISH, AFFORDABLE, AND UNIQUELY YOURS</div>
+        </div>
+      </div><div class="controls">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5"></circle></svg>
+      <input id="searchInput" placeholder="Search products..." />
+    </div>
+    <div class="filters">
+      <a href="file:///C:/Users/ADMIN/Downloads/Group_2%20Intro_Com%20Final%20Project%20BSIT%201E/ABOUT%20US%20.html">
+      <button class="btn" id="filterAll">About Us</button>
+      </a>
+      <a href="file:///C:/Users/ADMIN/Downloads/Group_2%20Intro_Com%20Final%20Project%20BSIT%201E/CONTACT%20US.html">
+      <button class="btn" id="filterNew">Contact us</button>
+      </a>
+      
+      <button class="btn" id="filterSale">On Sale</button>
+    </div>
+    <button class="btn" id="viewCartBtn">Cart (<span id="cartCount">0</span>)</button>
+  </div>
+</header>
+
+<main class="main">
+  <section>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">Products</h2>
+      <div class="muted" id="resultCount">0 items</div>
+    </div>
+
+    <div class="products" id="productsGrid">
+    
+    </div>
+  </section>
+
+  <aside class="cart-panel" id="cartPanel">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <strong>Your Cart</strong>
+        <div class="muted">Items in cart are saved locally</div>
+      </div>
+      <div class="muted" id="cartTotalShow">₱0.00</div>
+    </div>
+
+    <div class="cart-list" id="cartList">
+      
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+      <button class="btn grow" id="checkoutBtn">Checkout</button>
+      <button class="btn" id="clearCartBtn">Clear</button>
+    </div>
+
+    <div style="margin-top:12px;font-size:13px;color:var(--muted)">Tip: Click a product image to view details and add to cart.</div>
+  </aside>
+</main>
+
+
+
+  </div>  
+    <div class="modal" id="productModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div>
+        <img id="modalImg" src="" alt="Product image" />
+      </div>
+      <div>
+        <h3 id="modalTitle"></h3>
+        <div class="muted" id="modalTag"></div>
+        <p id="modalDesc" style="margin-top:8px;color:var(--muted)"></p>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+          <div class="price" id="modalPrice"></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="modalQty" type="number" min="1" value="1" style="width:66px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;" />
+            <button class="btn" id="modalAdd">Add to cart</button>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" id="closeModal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+  <script>
+
+const PRODUCTS = [
+  {
+    id: 1,
+    title: "Classic Leather Sneakers",
+    price: 2499.00,
+    tag: "New",
+    img: "Classic Leather Sneakers.jpg", 
+    desc: "Comfortable everyday sneakers with premium faux leather.",
+    onSale: false
+  },
+  {
+    id: 2,
+    title: "Smartwatch S3",
+    price: 4999.00,
+    tag: "On Sale",
+    img: "Smartwatch S3.jpg",
+    desc: "Track fitness, notifications and more. Long battery life.",
+    onSale: true
+  },
+  {
+    id: 3,
+    title: "Origami Backpack",
+    price: 1599.00,
+    tag: "Popular",
+    img: "Origami Backpack.jpg",
+    desc: "Lightweight, water-resistant backpack for daily adventures.",
+    onSale: false
+  },
+  {
+    id: 4,
+    title: "Noise-cancel Headphones",
+    price: 3499.00,
+    tag: "New",
+    img: "Noise-cancel Headphones.jpg",
+    desc: "Over-ear headphone with active noise cancellation.",
+    onSale: false
+  },
+  {
+    id: 5,
+    title: "Ceramic Coffee Mug",
+    price: 369.00,
+    tag: "On Sale",
+    img: "Ceramic Coffee Mug.WEBP",
+    desc: "Handmade ceramic mug. Dishwasher safe.",
+    onSale: true
+  },
+  {
+    id: 6,
+    title: "Minimal Desk Lamp",
+    price: 899.00,
+    tag: "Popular",
+    img: "Minimal Desk Lamp.WEBP",
+    desc: "Adjustable lamp with warm/cool light modes.",
+    onSale: false
+  }
+];
+
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+let CART = JSON.parse(localStorage.getItem('mini_ec_cart') || '{}');
+
+
+function renderProducts(products) {
+  const grid = $('#productsGrid');
+  grid.innerHTML = '';
+
+  products.forEach(p => {
+    const el = document.createElement('article');
+    el.className = 'card';
+
+    el.innerHTML = `
+      <a href="#" class="thumb" data-id="${p.id}">
+        <img loading="lazy" src="${p.img}" alt="${p.title}"/>
+      </a>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="title">${p.title}</div>
+          <div class="tag">${p.tag || ''}</div>
+        </div>
+        <div class="price-row">
+          <div class="price">₱${p.price.toFixed(2)}</div>
+          <div><button class="btn" data-add="${p.id}">Add</button></div>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(el);
+  });
+
+  $('#resultCount').textContent = `${products.length} items`;
+
+  $$('.card .thumb').forEach(a =>
+    a.addEventListener('click', openModalFromThumb)
+  );
+
+  $$('[data-add]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      const id = +e.currentTarget.dataset.add;
+      addToCart(id, 1);
+    })
+  );
+}
+
+
+const modal = $('#productModal');
+
+function openModalFromThumb(e) {
+  e.preventDefault();
+  const id = +e.currentTarget.dataset.id;
+  openModal(id);
+}
+
+function openModal(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+
+  $('#modalImg').src = p.img;
+  $('#modalTitle').textContent = p.title;
+  $('#modalPrice').textContent = `₱${p.price.toFixed(2)}`;
+  $('#modalDesc').textContent = p.desc;
+  $('#modalTag').textContent = p.tag || '';
+  $('#modalQty').value = 1;
+  $('#modalAdd').dataset.id = p.id;
+
+  modal.classList.add('open');
+}
+
+$('#closeModal').addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => {
+  if (e.target === modal) modal.classList.remove('open');
+});
+
+$('#modalAdd').addEventListener('click', () => {
+  const id = +$('#modalAdd').dataset.id;
+  const qty = Math.max(1, parseInt($('#modalQty').value));
+  addToCart(id, qty);
+  modal.classList.remove('open');
+});
+
+
+function saveCart() {
+  localStorage.setItem('mini_ec_cart', JSON.stringify(CART));
+  renderCart();
+}
+
+function addToCart(id, qty = 1) {
+  CART[id] = (CART[id] || 0) + qty;
+  saveCart();
+  flashCartCount();
+}
+
+function removeFromCart(id) {
+  delete CART[id];
+  saveCart();
+}
+
+function changeQty(id, qty) {
+  if (qty <= 0) removeFromCart(id);
+  else {
+    CART[id] = qty;
+    saveCart();
+  }
+}
+
+function getCartItems() {
+  return Object.keys(CART).map(k => {
+    const p = PRODUCTS.find(x => x.id === +k);
+    return { ...p, qty: CART[k] };
+  });
+}
+
+function formatCurrency(v) {
+  return `₱${v.toFixed(2)}`;
+}
+
+function renderCart() {
+  const list = $('#cartList');
+  list.innerHTML = '';
+  const items = getCartItems();
+  let total = 0;
+
+  items.forEach(it => {
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+
+    row.innerHTML = `
+      <img src="${it.img}" alt="${it.title}"/>
+      <div class="cart-meta">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>${it.title}</strong><div class="muted">${formatCurrency(it.price)}</div></div>
+          <div class="muted">${formatCurrency(it.price * it.qty)}</div>
+        </div>
+        <div style="margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+          <div class="qty">
+            <button class="btn small" data-dec="${it.id}">-</button>
+            <div style="min-width:36px;text-align:center">${it.qty}</div>
+            <button class="btn small" data-inc="${it.id}">+</button>
+          </div>
+          <button class="btn" data-remove="${it.id}">Remove</button>
+        </div>
+      </div>
+    `;
+
+    total += it.price * it.qty;
+    list.appendChild(row);
+  });
+
+  $('#cartTotalShow').textContent = formatCurrency(total);
+  $('#cartCount').textContent = items.reduce((sum, i) => sum + i.qty, 0);
+
+  $$('[data-inc]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      const id = +e.currentTarget.dataset.inc;
+      changeQty(id, CART[id] + 1);
+    })
+  );
+
+  $$('[data-dec]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      const id = +e.currentTarget.dataset.dec;
+      changeQty(id, CART[id] - 1);
+    })
+  );
+
+  $$('[data-remove]').forEach(btn =>
+    btn.addEventListener('click', e => {
+      const id = +e.currentTarget.dataset.remove;
+      removeFromCart(id);
+    })
+  );
+}
+
+$('#clearCartBtn').addEventListener('click', () => {
+  if (confirm("Clear entire cart?")) {
+    CART = {};
+    saveCart();
+  }
+});
+
+$('#checkoutBtn').addEventListener('click', () => {
+  const items = getCartItems();
+  if (items.length === 0) return alert('Your cart is empty.');
+
+  const total = items.reduce((s, it) => s + it.price * it.qty, 0);
+  const name = prompt('Enter your name to simulate checkout:');
+
+  if (name) {
+    alert(`Thanks ${name}! Order placed. Total: ${formatCurrency(total)}`);
+    CART = {};
+    saveCart();
+  }
+});
+
+
+function applyFilters() {
+  const q = $('#searchInput').value.toLowerCase();
+  const mode = window._filterMode || 'all';
+
+  let list = PRODUCTS.filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    p.tag?.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q)
+  );
+
+  if (mode === 'new') list = list.filter(p => p.tag?.toLowerCase() === 'new');
+  if (mode === 'sale') list = list.filter(p => p.onSale);
+
+  renderProducts(list);
+}
+
+$('#searchInput').addEventListener('input', applyFilters);
+$('#filterAll').addEventListener('click', () => { window._filterMode = 'all'; applyFilters(); });
+$('#filterNew').addEventListener('click', () => { window._filterMode = 'new'; applyFilters(); });
+$('#filterSale').addEventListener('click', () => { window._filterMode = 'sale'; applyFilters(); });
+
+$('#viewCartBtn').addEventListener('click', () =>
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+);
+
+function flashCartCount() {
+  $('#viewCartBtn').animate([
+    { transform: 'scale(1)' },
+    { transform: 'scale(1.1)' },
+    { transform: 'scale(1)' }
+  ], { duration: 200 });
+}
+
+
+function init() {
+  renderProducts(PRODUCTS);
+  renderCart();
+  applyFilters();
+}
+
+init();
+</script>
+
+  
+</body>
+</html>
